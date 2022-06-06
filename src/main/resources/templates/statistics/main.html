@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head xmlns:th="http://www.thymeleaf.org" lang="en">
+    <meta charset="UTF-8">
+    <title>Statistics</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/statistics/main.css}"/>
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script th:inline="javascript">
+        var expenses = [[${expenses}]];
+        var monthlyData = [[${monthlyData}]];
+    </script>
+    <script type="text/javascript" th:src="@{/js/statistics/main.js}"></script>
+</head>
+<body class="container">
+    <div th:include="fragments/header.html :: header" />
+    <div>
+        <div id="expenses-pie-chart" class="h-500px"/>
+    </div>
+    <div>
+        <div id="monthly-chart" class="h-500px"/>
+    </div>
+</body>
+</html>

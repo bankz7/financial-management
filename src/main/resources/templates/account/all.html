@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All account</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/45e67758f4.js" crossorigin="anonymous"></script>
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <script src="https://d3js.org/d3.v4.js"></script>
+
+</head>
+<body class="container">
+    <div th:include="fragments/header.html :: header" />
+    <a href="/accounts/add-form" class="btn btn-success m-3"> <i class="fa"></i>Add Account</a>
+
+    <div class="container">
+        <div class="row">
+             <div th:each="account : ${accounts}" class="col-sm-3 m-3 p-3 border border-primary">
+                <div>
+                    <div>
+                        <p class="m-0" th:text="${account.accountName}"/>
+                        <a th:href="'/transactions/add-form?accountId='+${account.accountId}"><i class="fa-solid fa-plus float-right"></i></a>
+                    </div>
+
+                </div>
+                <div>
+                    <p class="m-0" th:text="${account.currency.symbol} + ' ' + ${#numbers.formatDecimal(account.balance, 1, 'COMMA', 2, 'POINT')}"/>
+                </div>
+                 <div>
+                     <a th:href="'/accounts/edit-form/'+${account.accountId}">Edit</a>
+                     |
+                     <a onclick="return confirm('Are you sure you want to delete?');" th:href="'/accounts/delete/'+${account.accountId}" type="button">Delete</a>
+                 </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

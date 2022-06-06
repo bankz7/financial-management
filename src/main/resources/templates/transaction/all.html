@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All account</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/transaction/all.js}"></script>
+
+</head>
+<body class="container">
+    <div th:include="fragments/header.html :: header" />
+    <a href="/transactions/add-form" class="btn btn-success m-3"> <i class="fa"></i>Add Transaction</a>
+    <div class="m-3">
+        <form th:action="@{/transactions}">
+            <div class="sm-6">
+                <label for="accountSel">Account : </label>
+                <select id="accountSel" name="accounts"  class="selectpicker" multiple data-actions-box="true" data-width="fit">
+                    <option th:each="account : ${accountList}"
+                            th:value="${account.accountId}" th:text="${account.accountName}"></option>
+                </select>
+            </div>
+            <div class="sm-6">
+                <label for="transactionSel">Transaction Type : </label>
+                <select id="transactionSel" name="transactions" class="selectpicker" multiple data-actions-box="true" data-width="auto">
+                    <option th:each="transactionTypeOpt : ${T(com.badin.financialmanagement.model.TransactionType).values()}"
+                            th:value="${transactionTypeOpt}" th:text="${transactionTypeOpt}"></option>
+                </select>
+            </div>
+            <div class="sm-6">
+                <label for="categorySel">Category : </label>
+                <select id="categorySel" name="category" class="selectpicker" multiple data-actions-box="true" data-width="auto">
+                    <option th:each="category : ${categoryList}"
+                            th:value="${category.categoryId}" th:text="${category.categoryName}"></option>
+                </select>
+            </div>
+            <div>
+                <label for="fromDate">From Date : </label>
+                <input placeholder="Select date" id="fromDate" name="fromDate" class="datepicker">
+                <label for="toDate">To Date : </label>
+                <input placeholder="Select date" id="toDate" name="toDate" class="datepicker">
+            </div>
+
+            <input class="btn btn-primary"  type="submit"/>
+        </form>
+    </div>
+    <div>
+        <div id="my_dataviz"></div>
+
+        <div id="table_transaction"></div>
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Transaction Type</th>
+                    <th>Account</th>
+                    <th>Amount</th>
+                    <th>Category</th>
+                    <th>Transaction Date</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="transaction: ${transactions}">
+                    <td th:text="${transaction.transactionType}"/>
+                    <td th:if="${transaction.transactionType == T(com.badin.financialmanagement.model.TransactionType).TRANSFER}" th:text="${transaction.fromAccount.accountName} + ' -> '+${transaction.toAccount.accountName}"/>
+                    <td th:unless="${transaction.transactionType == T(com.badin.financialmanagement.model.TransactionType).TRANSFER}" th:text="${transaction.fromAccount.accountName}"/>
+                    <td th:text="${#numbers.formatDecimal(transaction.amount, 1, 'COMMA', 2, 'POINT')}"/>
+                    <td th:text="${transaction.category?.categoryName}"/>
+                    <td th:text="${#temporals.format(transaction.transactionDate, 'dd/MM/yyyy', new java.util.Locale('en', 'EN'))}"/>
+                    <td><a onclick="return confirm('Are you sure you want to delete?');" th:href="'/transactions/delete/'+${transaction.transactionId}" type="button">Delete</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

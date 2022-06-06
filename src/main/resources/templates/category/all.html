@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Categories</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body class="container">
+    <div th:include="fragments/header.html :: header" />
+    <a href="/categories/add-form" class="btn btn-success m-3"> <i class="fa"></i>Add Category</a>
+
+    <div>
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Category Name</th>
+                    <th>Parent Category</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="category: ${categories}">
+                    <td><a th:href="'/categories/edit-form/'+${category.categoryId}" th:text="${category.categoryName}"/></td>
+                    <td th:text="${category.parentCategory?.categoryName}"/>
+                    <td><a onclick="return confirm('Are you sure you want to delete?');" th:href="'/currencies/delete/'+${category.categoryId}" type="button">Delete</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
